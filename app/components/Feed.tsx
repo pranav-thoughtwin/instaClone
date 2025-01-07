@@ -1,7 +1,7 @@
 import Post from "./Post";
 import Stories from "./Stories";
 
-export default function () {
+export default function Feed() {
     const posts = ['post', 'post', 'post']
     return (
         <div>

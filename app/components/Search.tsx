@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import Image from "next/image";
 
-export default function () {
+export default function Search() {
     const recent = ['ted', 'ted', 'ted', 'ted', 'ted',];
     return (
         <div className="border-l absolute top-0 left-16 w-96 h-[600px] shadow-lg rounded-2xl bg-white">

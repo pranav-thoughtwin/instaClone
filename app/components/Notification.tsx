@@ -13,7 +13,7 @@ export default function Notification() {
                 <span className="font-semibold">Today</span>
                 {notifications.map((ele, idx) => {
                     return (
-                        <div className="mt-4 flex items-center w-full">
+                        <div key={idx} className="mt-4 flex items-center w-full">
                             <div>
                                 <Image
                                     src={"/dog.png"}

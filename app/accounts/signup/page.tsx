@@ -2,8 +2,8 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaFacebook, FaFacebookSquare } from "react-icons/fa";
+import { useState } from "react";
+import { FaEye, FaEyeSlash, FaFacebookSquare } from "react-icons/fa";
 
 export default function Signup() {
     const [number, setNumber] = useState('');
@@ -17,7 +17,7 @@ export default function Signup() {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleSignup = () => {
-        let errors = { number: '', password: '', fullName: '', username: '' };
+        const errors = { number: '', password: '', fullName: '', username: '' };
         let valid = true;
         if (!username) {
             console.log("hit");

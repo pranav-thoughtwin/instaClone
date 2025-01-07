@@ -3,10 +3,9 @@ import { useState } from "react";
 import LeftsideBar from "../components/LeftsideBar";
 import Search from "../components/Search";
 import Image from "next/image";
-import { FaGear, FaUserGear } from "react-icons/fa6";
 import Notification from "../components/Notification";
 
-export default function profile() {
+export default function Profile() {
     const [showSearch, setShowSearch] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
 

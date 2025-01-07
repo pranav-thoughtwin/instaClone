@@ -15,7 +15,7 @@ export default function Login() {
     const router = useRouter();
 
     const handleLogin = () => {
-        let errors = { username: '', password: '' };
+        const errors = { username: '', password: '' };
         let valid = true;
         if (!username) {
             errors.username = "Username is required";
@@ -113,7 +113,7 @@ export default function Login() {
                 <div className="text-[#165EAB] text-sm mx-auto mt-3 mb-6 cursor-pointer">Forgotten your password?</div>
             </div>
             <div className="border border-black-200 items-center p-4 w-96 mx-auto mt-2 flex justify-center">
-                Don't have an account? <span className="ml-1 font-bold text-[#1877F2] cursor-pointer"><Link href={"/accounts/signup"}>Sign up</Link></span>
+                Don&apos;t have an account? <span className="ml-1 font-bold text-[#1877F2] cursor-pointer"><Link href={"/accounts/signup"}>Sign up</Link></span>
             </div>
             <div className="">
                 <div className="mx-auto w-fit my-4 text-sm font-semibold text-gray-800">Get the app</div>

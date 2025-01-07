@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-export default function POST(){
+export default function POST() {
     try {
-        
-    } catch (error) {
-        return NextResponse.json({ error: "Error creating post" }, { status: 400 })
+
+    } catch (error: unknown) {
+        return NextResponse.json({ error: error }, { status: 400 })
     }
 }

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function () {
+export default function RightsideBar() {
     const suggestions = ['grayDP', 'grayDP', 'grayDP', 'grayDP', 'grayDP']
     return (
         <div className="w-80 ml-auto">

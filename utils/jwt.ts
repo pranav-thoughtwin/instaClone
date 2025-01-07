@@ -9,7 +9,8 @@ export function signToken(payload: object) {
 export function verifyToken(token: string) {
     try {
         return jwt.verify(token, SECRET_KEY);
-    } catch (error) {
+    } catch (error: unknown) {
+        console.log(error);
         return null;
     }
 }

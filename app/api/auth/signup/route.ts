@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const token = signToken({ id: user.id, email: user.email });
 
     return NextResponse.json({ user, token });
-  } catch (error) {
-    return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: error }, { status: 400 });
   }
 }
