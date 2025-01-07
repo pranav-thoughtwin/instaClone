@@ -16,7 +16,7 @@ export default function Notification() {
                         <div key={idx} className="mt-4 flex items-center w-full">
                             <div>
                                 <Image
-                                    src={"/dog.png"}
+                                    src={"/dogIcon.png"}
                                     height={40}
                                     width={40}
                                     alt="Profile picture"
