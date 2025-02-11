@@ -12,10 +12,17 @@ model User {
   username       String          @unique
   email          String          @unique
   password       String
+  fullName       String          @default("Unknown")
   bio            String?
   profilePicture String?
   createdAt      DateTime        @default(now())
   posts          Post[]
+  comments       Comment[]
+  likes          Like[]
+  sentRequests   FollowRequest[] @relation("SentRequests")
+  receivedRequests FollowRequest[] @relation("ReceivedRequests")
+  FollowerIds    Follower[]      @relation("FollowerId")
+  FolloweeIds    Follower[]      @relation("FolloweeId")
 }
 
 model Post {
@@ -25,4 +32,50 @@ model Post {
   imageUrl        String 
   caption         String?
   createdAt       DateTime      @default(now())
+  comments        Comment[]     
+  likes           Like[]        
+}
+
+model Comment {
+  id            Int             @id @default(autoincrement())
+  postId        Int             
+  post          Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id])
+  content       String
+  createdAt     DateTime        @default(now())
+}
+
+model Like {
+  id            Int             @id @default(autoincrement())
+  postId        Int             
+  post          Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId        Int             
+  user          User            @relation(fields: [userId], references: [id]) 
+  createdAt     DateTime        @default(now())
+}
+
+model FollowRequest {
+  id            Int             @id @default(autoincrement())
+  senderId      Int             
+  sender        User            @relation("SentRequests", fields: [senderId], references: [id]) 
+  receiverId    Int             
+  receiver      User            @relation("ReceivedRequests", fields: [receiverId], references: [id]) 
+  status        FollowRequestStatus @default(pending)
+  createdAt     DateTime        @default(now())
+}
+
+model Follower {
+  id            Int             @id @default(autoincrement())
+  followerId    Int
+  follower      User            @relation("FollowerId", fields: [followerId], references: [id])
+  followeeId    Int
+  followee      User            @relation("FolloweeId", fields: [followeeId], references: [id])
+  createdAt     DateTime        @default(now())
+}
+
+enum FollowRequestStatus {
+  pending
+  accepted
+  rejected
 }

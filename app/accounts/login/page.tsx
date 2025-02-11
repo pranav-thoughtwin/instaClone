@@ -1,10 +1,13 @@
 'use client'
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa";
+import { toast } from "react-toastify";
+import Cookie from 'js-cookie';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -14,22 +17,42 @@ export default function Login() {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const router = useRouter();
 
-    const handleLogin = () => {
-        const errors = { username: '', password: '' };
-        let valid = true;
-        if (!username) {
-            errors.username = "Username is required";
-            valid = false;
+    const handleLogin = async () => {
+        try {
+            const errors = { username: '', password: '' };
+            let valid = true;
+            if (!username) {
+                errors.username = "Username is required";
+                valid = false;
+            }
+            if (!password) {
+                errors.password = "Password is required";
+                valid = false;
+            }
+            setErrors(errors);
+            if (!valid) {
+                return;
+            }
+
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {
+                email: username,
+                password: password,
+            });
+            if (response) {
+                toast(response.data.message);
+            }
+            const token = response.data.token;
+            Cookie.set("token", token, { expires: 1, path: '/' });
+
+            router.push('/');
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                toast(error?.response?.data?.error);
+            }
+            else {
+                toast("An unexpected error occured");
+            }
         }
-        if (!password) {
-            errors.password = "Password is required";
-            valid = false;
-        }
-        setErrors(errors);
-        if (!valid) {
-            return;
-        }
-        router.push('/')
     }
 
     return (

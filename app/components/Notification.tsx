@@ -1,7 +1,76 @@
+import Cookie from "js-cookie";
+import { JwtPayload } from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from 'date-fns';
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { toast } from "react-toastify";
+import useApi from "../hooks/useApi";
+
+interface DecodedToken extends JwtPayload {
+    id?: number
+}
+
+interface FollowRequest {
+    createdAt: Date
+    id: number
+    receiverId: number
+    senderId: number
+    status: string
+    senderName?: string
+}
 
 export default function Notification() {
-    const notifications = ['notification', 'notification', 'notification'];
+    const [requests, setRequests] = useState<FollowRequest[]>([]);
+    const { apiCall } = useApi();
+
+    const fetchRequests = async () => {
+        try {
+            const token = Cookie.get("token");
+            let decodedToken: DecodedToken | null = null;
+            if (token) {
+                decodedToken = jwtDecode(token);
+            }
+
+            const response = await apiCall({ url: `api/followRequest/${decodedToken?.id}`, method: 'GET' });
+
+            const dataPromises = response?.data?.map(async (item: FollowRequest) => {
+                const userResponse = await apiCall({ url: `api/profile/id/${item.senderId}`, method: 'GET' })
+                const status = item.status === 'pending' ? '' : item.status;
+                return { ...item, senderName: userResponse?.data?.fullName, status };
+            });
+
+            const data = await Promise.all(dataPromises);
+            setRequests(data);
+        } catch (error) {
+            console.log("Error fetching follow requests: ", error);
+        }
+    };
+
+    const handleChange = async (ele: FollowRequest, event: SelectChangeEvent<string>) => {
+        const newStatus = event.target.value as string;
+        setRequests(prevRequests =>
+            (prevRequests ?? []).map(request =>
+                request.id === ele?.id ? { ...request, status: newStatus } : request
+            )
+        );
+        const response = await apiCall({
+            url: `api/followRequest/${ele?.id}`, method: 'PUT', data: {
+                status: event.target.value,
+                senderId: ele?.senderId,
+                receiverId: ele?.receiverId
+            }
+        });
+        if (response.status === 200) {
+            toast("Status updated");
+        }
+    };
+
+    useEffect(() => {
+        fetchRequests();
+    }, []);
+
     return (
         <div className="border-l absolute top-0 left-16 w-96 h-[600px] shadow-lg rounded-2xl bg-white">
             <div className="p-6 pt-6">
@@ -11,7 +80,7 @@ export default function Notification() {
             </div>
             <div className="pl-6">
                 <span className="font-semibold">Today</span>
-                {notifications.map((ele, idx) => {
+                {requests && requests.map((ele, idx) => {
                     return (
                         <div key={idx} className="mt-4 flex items-center w-full">
                             <div>
@@ -25,14 +94,37 @@ export default function Notification() {
                             </div>
                             <div className="text-xs ml-4">
                                 <div className="font-bold">
-                                    roirin_femlivart2931ec
+                                    {ele?.senderName}
                                 </div>
                                 <div>
-                                    started following you. <span className="text-gray-500">1d</span>
+                                    {
+                                        ele.status === "accepted" ?
+                                            "Started following you" :
+                                            (ele.status === "rejected") ? "Request rejected" : "Requested to follow you"
+                                    }
+                                    {/* Requested to follow you */}
+                                    <div className="text-gray-500">
+                                        {formatDistanceToNow(new Date(ele?.createdAt))} ago
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <button className="flex bg-[#c4c4c4] text-sm rounded-md px-3 py-1 ml-14 ">Requested</button>
+                            <div className="w-2 ml-16">
+                                {ele.status === "accepted" ? <></> :
+                                    <Box sx={{ minWidth: 100 }}>
+                                        <FormControl size="small" fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Action</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={ele.status}
+                                                label="Action"
+                                                onChange={(event) => handleChange(ele, event)}
+                                            >
+                                                <MenuItem value={"accepted"}>Accept</MenuItem>
+                                                <MenuItem value={"rejected"}>Reject</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Box>}
                             </div>
                         </div>
                     )

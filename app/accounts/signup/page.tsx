@@ -1,47 +1,70 @@
 'use client'
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaFacebookSquare } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import Cookie from 'js-cookie';
 
 export default function Signup() {
-    const [number, setNumber] = useState('');
+    const [numberOrEmail, setNumberOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
-    const [errors, setErrors] = useState({ number: '', password: '', fullName: '', username: '' });
+    const [errors, setErrors] = useState({ numberOrEmail: '', password: '', fullName: '', username: '' });
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleSignup = async () => {
+        try {
+            const errors = { numberOrEmail: '', password: '', fullName: '', username: '' };
+            let valid = true;
+            if (!username) {
+                errors.username = "Username is required";
+                valid = false;
+            }
+            if (!password) {
+                errors.password = "Password is required";
+                valid = false;
+            }
+            if (!numberOrEmail) {
+                errors.numberOrEmail = "Mobile number or email is required";
+                valid = false;
+            }
+            if (!fullName) {
+                errors.fullName = "Full name is required";
+                valid = false;
+            }
+            setErrors(errors);
 
-    const handleSignup = () => {
-        const errors = { number: '', password: '', fullName: '', username: '' };
-        let valid = true;
-        if (!username) {
-            console.log("hit");
+            if (!valid) {
+                return;
+            }
 
-            errors.username = "Username is required";
-            valid = false;
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`, {
+                username: username,
+                email: numberOrEmail,
+                password: password,
+                fullName
+            });
+
+            if (response) {
+                toast(response.data.message);
+            }
+            const token = response.data.token;
+            Cookie.set("token", token, { expires: 1, path: '/' });
+
+            router.push('/');
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                toast(error?.response?.data?.error);
+            }
+            else {
+                toast("An unexpected error occured");
+            }
         }
-        if (!password) {
-            errors.password = "Password is required";
-            valid = false;
-        }
-        if (!number) {
-            errors.number = "Mobile number or email is required";
-            valid = false;
-        }
-        if (!fullName) {
-            errors.fullName = "Full name is required";
-            valid = false;
-        }
-        setErrors(errors);
-        if (!valid) {
-            return;
-        }
-        router.push('/');
     }
 
     return (
@@ -72,14 +95,14 @@ export default function Signup() {
                         required
                         id="outlined-required"
                         label="Mobile number or email address"
-                        value={number}
+                        value={numberOrEmail}
                         onChange={(e) => {
-                            setNumber(e.target.value);
-                            setErrors((prev) => ({ ...prev, number: '' }))
+                            setNumberOrEmail(e.target.value);
+                            setErrors((prev) => ({ ...prev, numberOrEmail: '' }))
                         }
                         }
-                        error={!!errors.number}
-                        helperText={errors.number}
+                        error={!!errors.numberOrEmail}
+                        helperText={errors.numberOrEmail}
                         slotProps={{
                             inputLabel: {
                                 required: false,
@@ -101,7 +124,7 @@ export default function Signup() {
                                         aria-label={
                                             showPassword ? 'hide the password' : 'display the password'
                                         }
-                                        onClick={handleClickShowPassword}
+                                        onClick={() => setShowPassword((show) => !show)}
                                         edge="end"
                                     >
                                         {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -173,9 +196,7 @@ export default function Signup() {
                 <div className="mt-3 mb-4">
                     <Button onClick={handleSignup} variant="contained" fullWidth>Sign Up</Button>
                 </div>
-
             </div>
-
         </div>
     )
 }

@@ -1,16 +1,39 @@
 'use client'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import Cookie from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "jsonwebtoken";
 interface LeftsideBarProps {
     setShowSearch: () => void
     setShowNotification: () => void
+    setShowCreate: () => void
 }
 
-export default function LeftsideBar({ setShowSearch, setShowNotification }: LeftsideBarProps) {
+interface DecodedToken extends JwtPayload {
+    name?: string
+} 
+
+export default function LeftsideBar({ setShowSearch, setShowNotification, setShowCreate }: LeftsideBarProps) {
     const router = useRouter();
     const [showIcon, setShowIcon] = useState(false);
+    const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
+
+    useEffect(() => {
+        const token = Cookie.get("token");
+        if (token) {
+            const decoded = jwtDecode<DecodedToken>(token);
+            setDecodedToken(decoded);
+        }
+    }, []);
+
+    const handleSignout = () => {
+        Cookie.remove("token", { path: '/' });
+        router.push('/accounts/login');
+        toast("Signout successful");
+    }
 
     const items = [
         {
@@ -46,17 +69,17 @@ export default function LeftsideBar({ setShowSearch, setShowNotification }: Left
         {
             name: 'Create',
             icon: 'create',
-            onClick: () => { }
+            onClick: () => { setShowCreate() }
         },
         {
-            name: 'Profile',
+            name: `${decodedToken?.name}`,
             icon: 'profile',
             onClick: () => { router.push('/profile') }
         },
         {
-            name: 'More',
-            icon: 'more',
-            onClick: () => { }
+            name: 'Signout',
+            icon: 'logout',
+            onClick: () => { handleSignout() }
         },
     ];
 
@@ -78,8 +101,8 @@ export default function LeftsideBar({ setShowSearch, setShowNotification }: Left
                             <div>
                                 <Image
                                     src={`/${item.icon}.png`}
-                                    width={25}
-                                    height={25}
+                                    width={item.icon === 'logout' ? 20 : 25}
+                                    height={item.icon === 'logout' ? 20 : 25}
                                     alt={item.name}
                                 />
                             </div>

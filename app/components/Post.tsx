@@ -1,37 +1,135 @@
 import Image from "next/image";
 import { FaEllipsisH } from "react-icons/fa";
+import { formatDistanceToNow } from 'date-fns';
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import Comments from "./Comments";
+import useApi from "../hooks/useApi";
 
-export default function Post() {
+interface Post {
+    id: number;
+    userId: number;
+    imageUrl: string;
+    caption: string;
+    createdAt: string;
+    user: {
+        username: string;
+        profilePicture: string
+    };
+}
+
+interface PostProps {
+    data: Post
+}
+
+export default function Post({ data }: PostProps) {
+    const [liked, setLiked] = useState(false);
+    const [comment, setComment] = useState("");
+    const [showComments, setShowComments] = useState(false);
+    const { apiCall } = useApi();
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push(`/profile/${data?.user.username}`);
+    }
+
+    const handleLike = async () => {
+        if (!liked) {
+            const response = await apiCall({
+                url: `api/like`, method: 'POST', data: {
+                    postId: data?.id
+                }
+            })
+            if (response.status === 200) {
+                toast("Post liked");
+            }
+            setLiked(true);
+        }
+        else {
+            toast("Already liked");
+        }
+    }
+
+    const fetchLikeStatus = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/like/status`, method: 'POST', data: {
+                    postId: data?.id
+                }
+            })
+            if (response?.data?.length > 0) {
+                setLiked(true);
+            }
+            else {
+                setLiked(false);
+            }
+        } catch (error) {
+            console.log("Error fetching like status of post: ", error);
+        }
+    }
+
+    const postComment = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/comment`, method: `POST`, data: {
+                    postId: data?.id,
+                    content: comment
+                }
+            })
+            setComment("");
+            console.log(response)
+            toast("Comment posted");
+        } catch (error) {
+            console.log("Error posting comment: ", error);
+        }
+    }
+
+    const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setComment(e.target.value);
+    }
+
+
+
+    useEffect(() => {
+        fetchLikeStatus();
+    }, []);
+
     return (
         <div className="border-b mb-4 pb-4 border-gray-300 ml-40 w-[450px] mt-6">
-            <div className="flex items-center mx-auto">
-                <Image
-                    src={"/postDP.png"}
-                    width={45}
-                    height={45}
-                    alt={"Post DP"}
-                    className="cursor-pointer"
-                />
-                <div className="mx-2 cursor-pointer">
-                    lewishamilton
+            {showComments && <Comments data={data} open={showComments} setOpen={setShowComments} />}
+            <div className="flex items-center w-full mx-auto">
+                <div className="flex items-center" onClick={handleClick}>
+                    <Image
+                        src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
+                        width={45}
+                        height={45}
+                        alt={"Post DP"}
+                        className="cursor-pointer rounded-full"
+                    />
+                    <div className="mx-2 cursor-pointer">
+                        {data?.user?.username}
+                    </div>
                 </div>
-                <Image
-                    src={"/verified.png"}
-                    width={12}
-                    height={12}
-                    alt={"Verified icon"}
-                />
+                <div className="ml-12">
+                    <Image
+                        src={"/verified.png"}
+                        width={22}
+                        height={22}
+                        alt={"Verified icon"}
+                    />
+                </div>
+                {/* Todo - Fix date alignment */}
                 <div className="text-xs ml-2 text-gray-500">
-                    • 5h
+                    • {formatDistanceToNow(data.createdAt)}
                 </div>
                 <div className="ml-56 cursor-pointer">
                     <FaEllipsisH color="grey" />
                 </div>
-
             </div>
             <div className="mt-2">
                 <Image
-                    src={"/post1.png"}
+                    src={data?.imageUrl}
                     width={500}
                     height={500}
                     alt={"Verified icon"}
@@ -39,11 +137,12 @@ export default function Post() {
             </div>
             <div className="flex mt-2 item-center">
                 <Image
-                    src={"/like.png"}
+                    src={liked ? "/liked.png" : "/like.png"}
                     width={25}
                     height={25}
                     alt={"like icon"}
                     className="cursor-pointer"
+                    onClick={handleLike}
                 />
                 <Image
                     src={"/comment.png"}
@@ -51,6 +150,7 @@ export default function Post() {
                     height={25}
                     alt={"comment icon"}
                     className="ml-4 cursor-pointer"
+                    onClick={() => setShowComments(true)}
                 />
                 <Image
                     src={"/share.png"}
@@ -81,11 +181,16 @@ export default function Post() {
             <div className="text-sm font-bold mt-2 text-gray-800 cursor-pointer">
                 See translation
             </div>
-            <div className="text-gray-500 mt-2 text-sm cursor-pointer">
+            <div onClick={() => setShowComments(true)} className="text-gray-500 mt-2 text-sm cursor-pointer">
                 View all 13,384 comments
             </div>
-            <div className="text-gray-800 mt-2 text-sm cursor-pointer">
-                Add a comment…
+            <div className="text-gray-500 mt-2 space-x-1 flex text-sm">
+                <p className="font-bold">thepranavshukla</p>
+                <p>Dummy comment</p>
+            </div>
+            <div className="text-gray-800 mt-2 justify-between flex text-sm ">
+                <input value={comment} onChange={handleComment} type="text" placeholder="Add a comment…" className="p-2 focus:outline-none focus:border-none -m-2" />
+                {comment.length > 0 && <p onClick={postComment} className="text-blue-400 font-bold cursor-pointer">Post</p>}
             </div>
         </div>
     )
