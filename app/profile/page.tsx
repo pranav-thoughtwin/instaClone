@@ -222,7 +222,7 @@ export default function Profile() {
                                 Product/service
                             </div>
                             <div>
-                                {editing ? <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} /> : bio}
+                                {editing ? <input type="text" value={bio || ""} onChange={(e) => setBio(e.target.value)} /> : bio}
                                 {/* {userData?.bio} */}
                             </div>
                             <div className="text-blue-600 font-bold cursor-pointer">
