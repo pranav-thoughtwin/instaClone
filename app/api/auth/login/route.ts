@@ -1,13 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { corsMiddleware } from '../../middleware/corsMiddleware';
 
-export async function POST(request: NextRequest) {
-    const response = NextResponse.next();
-    await corsMiddleware(request, response);
-
+export async function POST(request: Request) {
     try {
         const prisma = new PrismaClient();
         const { email, password } = await request.json();
