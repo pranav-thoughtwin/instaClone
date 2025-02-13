@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     await corsMiddleware(request, response, () => {});
 
     try {
-        const token = request.cookies.get('token');
+        const token = request.cookies.get('token'); 
         if (!token) {
             return NextResponse.redirect(new URL('/accounts/login', request.url));
         }
