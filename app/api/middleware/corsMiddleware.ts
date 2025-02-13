@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function corsMiddleware(req: NextRequest, res: NextResponse, next: () => void) {
+export async function corsMiddleware(req: NextRequest, res: NextResponse) {
   res.headers.set('Access-Control-Allow-Origin', '*');
   res.headers.set('Access-Control-Allow-Methods', 'GET,HEAD,POST,PUT,DELETE');
   res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -10,5 +10,5 @@ export async function corsMiddleware(req: NextRequest, res: NextResponse, next: 
     return new NextResponse(null, { status: 204 });
   }
 
-  next();
+  return NextResponse.next();
 }
