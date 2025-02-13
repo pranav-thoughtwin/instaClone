@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken"
 import { NextRequest, NextResponse } from "next/server"
-import { authMiddleware } from "../middleware/auth";
+// import { authMiddleware } from "../middleware/auth";
 
 interface UserJwtPayload extends JwtPayload {
     id: number
@@ -13,10 +13,10 @@ interface AuthenticatedRequest extends NextRequest {
 export async function GET(request: AuthenticatedRequest) {
     try {
         const prisma = new PrismaClient();
-        const response = authMiddleware(request);
-        if (response.status != 200) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        // const response = authMiddleware(request);
+        // if (response.status != 200) {
+        //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        // }
 
         const following = await prisma.follower.findMany({
             where: {
