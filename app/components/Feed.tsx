@@ -25,7 +25,7 @@ export default function Feed() {
     };
 
     const feedPostReq = async () => {
-        const res = await apiCall({ url: '/api/feed', method: 'POST' });
+        const res = await apiCall({ url: 'api/feed', method: 'POST' });
         console.log("Feed Post response: ", res);        
     }
 
