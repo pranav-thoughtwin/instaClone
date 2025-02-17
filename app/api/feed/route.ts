@@ -56,7 +56,7 @@ export async function GET(request: AuthenticatedRequest) {
     }
 }
 
-export async function POST(request: NextRequest) { 
+export async function POST(request: AuthenticatedRequest) { 
     try {
       console.log(request);
       const response = NextResponse.json({ message: "Test feed post" }, { status: 201 });
