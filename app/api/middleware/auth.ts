@@ -22,5 +22,4 @@ export function authMiddleware(request: AuthenticatedRequest) {
 
     request.user = user;
     return NextResponse.json({ message: 'Next' }, { status: 200 });
-    // return Nextesponse.next();
 }
