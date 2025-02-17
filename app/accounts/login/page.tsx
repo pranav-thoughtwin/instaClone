@@ -65,11 +65,6 @@ export default function Login() {
         console.log("Post response: ", res);        
     }
 
-    const feedPostReq = async () => {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/feed`);
-        console.log("Feed Post response: ", res);        
-    }
-
     return (
         <div>
             <div className="border justify-center border-black-200 mt-4 flex flex-col w-96 mx-auto px-12">
@@ -167,7 +162,6 @@ export default function Login() {
                 <div>
                 <button className="p-2 bg-red-300 -mt-44 mr-4" onClick={getReq}>get req</button>
                 <button className="p-2 bg-red-300 -mt-44" onClick={postReq}>post req</button>
-                <button className="p-2 bg-red-300 -mt-44" onClick={feedPostReq}>feed post req</button>
             </div>
             </div>
         </div>
