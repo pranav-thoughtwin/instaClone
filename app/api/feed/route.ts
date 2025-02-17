@@ -10,11 +10,6 @@ interface AuthenticatedRequest extends NextRequest {
     user: UserJwtPayload
 }
 
-export async function OPTIONS(request: NextRequest) {
-    console.log(request);
-    return NextResponse.json({}, { status: 204 });
-}
-
 export async function GET(request: AuthenticatedRequest) {
     try {
         const prisma = new PrismaClient();
