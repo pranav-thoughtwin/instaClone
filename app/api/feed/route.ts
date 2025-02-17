@@ -55,3 +55,15 @@ export async function GET(request: AuthenticatedRequest) {
 
     }
 }
+
+export async function POST(request: NextRequest) { 
+    try {
+      console.log(request);
+      const response = NextResponse.json({ message: "Test feed post" }, { status: 201 });
+  
+      return response;
+  
+    } catch (error: unknown) {
+      return NextResponse.json({ error: error }, { status: 400 });
+    }
+  }
