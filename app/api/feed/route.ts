@@ -59,7 +59,12 @@ export async function GET(request: AuthenticatedRequest) {
 export async function POST(request: AuthenticatedRequest) { 
     try {
       console.log(request);
-      const response = NextResponse.json({ message: "Test feed post" }, { status: 201 });
+      const response = authMiddleware(request);
+      if (response.status != 200) {
+          return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+    //   const response = NextResponse.json({ message: "Test feed post" }, { status: 201 });
   
       return response;
   

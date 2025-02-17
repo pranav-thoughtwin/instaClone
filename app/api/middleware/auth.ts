@@ -15,14 +15,12 @@ export function authMiddleware(request: AuthenticatedRequest) {
     }
 
     const user = jwt.verify(token, SECRET_KEY);
-    // console.log("User from token: ", user);
 
     if (!user) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     request.user = user;
-    // console.log("Request: ", request.user);
-
-    return NextResponse.next();
+    return NextResponse.json({ message: 'Next' }, { status: 200 });
+    // return Nextesponse.next();
 }
