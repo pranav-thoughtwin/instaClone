@@ -55,6 +55,16 @@ export default function Login() {
         }
     }
 
+    const getReq = async () => {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/test`);
+        console.log("Get response: ", res);
+    }
+
+    const postReq = async () => {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/test`);
+        console.log("Post response: ", res);        
+    }
+
     return (
         <div>
             <div className="border justify-center border-black-200 mt-4 flex flex-col w-96 mx-auto px-12">
@@ -149,6 +159,10 @@ export default function Login() {
                         className="mx-auto"
                     />
                 </div>
+                <div>
+                <button className="p-2 bg-red-300 -mt-44 mr-4" onClick={getReq}>get req</button>
+                <button className="p-2 bg-red-300 -mt-44" onClick={postReq}>post req</button>
+            </div>
             </div>
         </div>
     )
