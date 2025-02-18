@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { formatDistanceToNow } from "date-fns";
 import useApi from "../hooks/useApi";
-import { Comment, CommentsProps } from "@/types";
+import { Comment, CommentsProps } from "@/types"; 
 
 export default function Comments({ open, setOpen, data }: CommentsProps) {
     const [comments, setComments] = useState<Comment[]>([]);
@@ -80,7 +80,7 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                                 <p className="ml-2">{data?.caption ? data?.caption : "No caption found"}</p>
                                             </div>
                                             <p className="text-gray-500">
-                                                {formatDistanceToNow(new Date(data?.createdAt))}
+                                                {data?.createdAt && formatDistanceToNow(new Date(data?.createdAt))}
                                             </p>
                                         </div>
                                     </div>
