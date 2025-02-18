@@ -1,14 +1,7 @@
 import { authMiddleware } from "@/app/api/middleware/auth";
+import { AuthenticatedRequest } from "@/types";
 import { PrismaClient } from "@prisma/client";
-import { JwtPayload } from "jsonwebtoken";
-import { NextRequest, NextResponse } from "next/server";
-
-interface UserJwtPayload extends JwtPayload {
-    id: number
-}
-interface AuthenticatedRequest extends NextRequest {
-    user: UserJwtPayload
-}
+import { NextResponse } from "next/server";
 
 export async function GET(request: AuthenticatedRequest) {
     try {
@@ -17,7 +10,6 @@ export async function GET(request: AuthenticatedRequest) {
             return NextResponse.json({ error: "No token found" });
         }
 
-        // const username = await request.json();
         const url = new URL(request.url);
         const username = url.pathname.split("/").pop();
         const prisma = new PrismaClient();
@@ -29,7 +21,6 @@ export async function GET(request: AuthenticatedRequest) {
                 }
             }
         })
-        console.log("Accounts: ", accounts);
         return NextResponse.json(accounts);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 400 });

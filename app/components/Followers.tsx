@@ -2,7 +2,6 @@ import { Modal } from "@mui/material";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-
 interface Follower {
     id: number,
     followerId: number,
@@ -14,7 +13,6 @@ interface Follower {
         fullName: string
     }
 }
-
 interface FollowersProp {
     showFollowers: boolean;
     setShowFollowers: (arg: boolean) => void;

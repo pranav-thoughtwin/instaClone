@@ -1,16 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { JwtPayload } from "jsonwebtoken"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 import { authMiddleware } from "../middleware/auth";
+import { AuthenticatedRequest } from "@/types";
 
-interface UserJwtPayload extends JwtPayload {
-    id: number
-}
-interface AuthenticatedRequest extends NextRequest {
-    user: UserJwtPayload
-}
 
-export async function GET(request: AuthenticatedRequest) { 
+export async function GET(request: AuthenticatedRequest) {
     try {
         const prisma = new PrismaClient();
         const response = authMiddleware(request);

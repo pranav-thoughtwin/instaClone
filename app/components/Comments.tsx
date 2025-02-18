@@ -4,36 +4,7 @@ import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { formatDistanceToNow } from "date-fns";
 import useApi from "../hooks/useApi";
-
-interface Post {
-    id: number;
-    userId: number;
-    imageUrl: string;
-    caption: string;
-    createdAt: string;
-    user: {
-        username: string;
-        profilePicture: string
-    };
-}
-
-interface CommentsProps {
-    open: boolean,
-    setOpen: (value: boolean) => void
-    data: Post
-}
-
-interface Comment {
-    id: number,
-    postId: number,
-    userId: number,
-    content: string,
-    createdAt: string
-    user: {
-        username: string,
-        profilePicture: string
-    }
-}
+import { Comment, CommentsProps } from "@/types";
 
 export default function Comments({ open, setOpen, data }: CommentsProps) {
     const [comments, setComments] = useState<Comment[]>([]);
@@ -53,7 +24,6 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
     useEffect(() => {
         fetchComments();
     }, []);
-
 
     return (
         <div className="">

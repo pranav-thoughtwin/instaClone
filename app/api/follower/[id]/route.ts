@@ -1,14 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { JwtPayload } from "jsonwebtoken";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authMiddleware } from "../../middleware/auth";
-
-interface UserJwtPayload extends JwtPayload {
-    id: number
-}
-interface AuthenticatedRequest extends NextRequest {
-    user: UserJwtPayload
-}
+import { AuthenticatedRequest } from "@/types";
 
 export async function GET(request: AuthenticatedRequest) {
     try {

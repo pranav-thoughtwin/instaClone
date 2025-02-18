@@ -4,16 +4,13 @@ import LeftsideBar from "../components/LeftsideBar";
 import Search from "../components/Search";
 import Image from "next/image";
 import Notification from "../components/Notification";
-import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Cookie from "js-cookie";
 import Create from "../components/Create";
 import Followers from "../components/Followers";
 import Following from "../components/Following";
 import useApi from "../hooks/useApi";
-
-interface DecodedToken extends JwtPayload {
-    id?: number
-}
+import { DecodedToken } from "@/types";
 
 interface User {
     id: number,

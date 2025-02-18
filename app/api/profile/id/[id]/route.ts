@@ -1,14 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { JwtPayload } from "jsonwebtoken";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authMiddleware } from "../../../middleware/auth";
+import { AuthenticatedRequest } from "@/types";
 
-interface UserJwtPayload extends JwtPayload {
-    id: number
-}
-interface AuthenticatedRequest extends NextRequest {
-    user: UserJwtPayload
-}
 export async function GET(request: AuthenticatedRequest) {
     try {
         const response = authMiddleware(request);
@@ -43,7 +37,7 @@ export async function POST(request: AuthenticatedRequest) {
         if (response.status != 200) {
             return NextResponse.json({ error: "No token found" });
         }
-        
+
         const { bio, profilePicture } = await request.json();
         const url = new URL(request.url);
         const userId = url.pathname.split("/").pop();
@@ -51,7 +45,7 @@ export async function POST(request: AuthenticatedRequest) {
         if (userId) {
             userIdInt = parseInt(userId);
         }
-        
+
         const prisma = new PrismaClient();
         const profileData = await prisma.user.update({
             where: {

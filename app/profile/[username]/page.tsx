@@ -3,7 +3,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Cookie from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from 'jsonwebtoken';
 import LeftsideBar from '@/app/components/LeftsideBar';
 import Search from '@/app/components/Search';
 import Notification from '@/app/components/Notification';
@@ -12,50 +11,7 @@ import Followers from '@/app/components/Followers';
 import Following from '@/app/components/Following';
 import Image from 'next/image';
 import useApi from '@/app/hooks/useApi';
-
-interface DecodedToken extends JwtPayload {
-    id?: number
-}
-
-interface User {
-    id: number,
-    username: string,
-    email: string,
-    password: string,
-    fullName: string,
-    bio: string,
-    profilePicture: string,
-    createdAt: Date
-}
-
-interface Follower {
-    id: number,
-    followerId: number,
-    followeeId: number,
-    createdAt: Date,
-    follower: {
-        username: string,
-        profilePicture: string,
-        fullName: string
-    }
-}
-
-interface Followee {
-    id: number,
-    followerId: number,
-    followeeId: number,
-    createdAt: Date,
-    followee: {
-        username: string
-        profilePicture: string,
-        fullName: string
-    }
-}
-interface Post {
-    id: number,
-    caption: string,
-    imageUrl: string
-}
+import { DecodedToken, Followee, Follower, Post, User } from '@/types';
 
 const Page = () => {
     const pathname = usePathname();
@@ -179,16 +135,7 @@ const Page = () => {
                                 {userData?.username}
                             </div>
                             <div className="ml-4 space-x-2">
-                                <button className="px-4 rounded-lg bg-[#EFEFEF] text-sm  p-2"
-                                // onClick={() => 
-                                // {
-                                //     setEditing((prev => !prev))
-                                //     if (editing) {
-                                //         handleSave();
-                                //     }
-                                // }}
-                                >
-                                    {/* {editing ? "Save" : "Edit profile"} */}
+                                <button className="px-4 rounded-lg bg-[#EFEFEF] text-sm  p-2">
                                     Edit profile
                                 </button>
                                 <button className="px-4 rounded-lg bg-[#EFEFEF] text-sm  p-2">Ad tools</button>

@@ -1,16 +1,9 @@
-import { JwtPayload } from "jsonwebtoken"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { authMiddleware } from "../../middleware/auth";
 import { PrismaClient } from "@prisma/client";
+import { AuthenticatedRequest } from "@/types";
 
-interface UserJwtPayload extends JwtPayload {
-    id: number
-}
-interface AuthenticatedRequest extends NextRequest {
-    user: UserJwtPayload
-}
-
-export async function POST(request: AuthenticatedRequest){
+export async function POST(request: AuthenticatedRequest) {
     try {
         const response = authMiddleware(request);
         if (response.status != 200) {
@@ -18,7 +11,7 @@ export async function POST(request: AuthenticatedRequest){
         }
 
         const prisma = new PrismaClient();
-        const {postId} = await request.json();
+        const { postId } = await request.json();
         const userId = request.user
         const status = await prisma.like.findMany({
             where: {
@@ -26,7 +19,6 @@ export async function POST(request: AuthenticatedRequest){
                 userId: userId?.id
             }
         })
-        // console.log("status: ", status);
         return NextResponse.json(status);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 401 });

@@ -5,16 +5,12 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { JwtPayload } from "jsonwebtoken";
+import { DecodedToken } from "@/types";
 interface LeftsideBarProps {
     setShowSearch: () => void
     setShowNotification: () => void
     setShowCreate: () => void
 }
-
-interface DecodedToken extends JwtPayload {
-    name?: string
-} 
 
 export default function LeftsideBar({ setShowSearch, setShowNotification, setShowCreate }: LeftsideBarProps) {
     const router = useRouter();

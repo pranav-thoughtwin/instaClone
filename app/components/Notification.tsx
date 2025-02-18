@@ -1,5 +1,4 @@
 import Cookie from "js-cookie";
-import { JwtPayload } from "jsonwebtoken";
 import { jwtDecode } from "jwt-decode";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -7,11 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { toast } from "react-toastify";
 import useApi from "../hooks/useApi";
-
-interface DecodedToken extends JwtPayload {
-    id?: number
-}
-
+import { DecodedToken } from "@/types";
 interface FollowRequest {
     createdAt: Date
     id: number
