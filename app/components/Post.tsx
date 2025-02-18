@@ -120,7 +120,7 @@ export default function Post({ data }: PostProps) {
                             alt={"Verified icon"}
                         />
                     </div>
-                    <div className="w-36 text-x ml-2 text-gray-500">
+                    <div className="w-36 text-sm ml-2 text-gray-500">
                         • {formatDistanceToNow(data.createdAt)}
                     </div>
                 </div>
