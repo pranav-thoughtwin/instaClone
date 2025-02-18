@@ -5,11 +5,11 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
 
     try {
-        const tokenCookie = request.cookies.get('token');
-        const token = tokenCookie?.value;
+        const token = request.headers.get('Authorization')?.split(' ')[1];
 
         if (!token) {
-            return NextResponse.redirect(new URL('/accounts/login', request.url));
+            // return NextResponse.redirect(new URL('/accounts/login', request.url));
+            return response
         }
 
         const SECRET_KEY = process.env.NEXT_PUBLIC_JWT_SECRET || 'secret';
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
                 response.cookies.delete('token');
                 return NextResponse.redirect(new URL('/accounts/login', request.url));
             }
-            // return NextResponse.json({ error: 'Unauthordfized' }, { status: 401 });
+            // return NextResponse.json({ error: 'Unauthordfized' }, { s`tatus: 401 });
             return NextResponse.redirect(new URL('/accounts/login', request.url));
         }
 
@@ -36,5 +36,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/api/:path*', '/', '/profile'],
+    matcher: ['/', '/profile'],
 };
