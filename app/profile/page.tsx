@@ -159,7 +159,7 @@ export default function Profile() {
 
             <div className="mt-14 ml-16 w-[950px]">
                 <div className="ml-20 flex">
-                    <div>
+                    <div className="w-36">
                         <Image
                             src={"/profile.png"}
                             width={140}
@@ -167,7 +167,7 @@ export default function Profile() {
                             alt="profile logo"
                         />
                     </div>
-                    <div className="flex flex-col ml-32">
+                    <div className="w-96  flex flex-col ml-32">
                         <div className="flex items-center">
                             <div className="text-xl">
                                 {userData?.username}
@@ -194,7 +194,6 @@ export default function Profile() {
                         </div>
                         <div className="space-x-8 flex mt-4">
                             <div className="flex">
-                                {/* <span className="font-bold">   */}
                                 <span className="font-bold">                                    {posts && posts?.length > 0 ? posts?.length : 0}
                                 </span>
                                 <div className="ml-1">posts</div>
@@ -218,9 +217,20 @@ export default function Profile() {
                             <div className="text-gray-400">
                                 Product/service
                             </div>
-                            <div>
-                                {editing ? <input type="text" value={bio || ""} onChange={(e) => setBio(e.target.value)} /> : bio}
-                                {/* {userData?.bio} */}
+                            <div className="mt-4">
+                                {editing ? (
+                                    <input
+                                        type="text"
+                                        className="border-2 border-blue-200 bg-blue-100 shadow-sm rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out w-full"
+                                        value={bio || ""}
+                                        onChange={(e) => setBio(e.target.value)}
+                                        placeholder="Enter your bio"
+                                    />
+                                ) : (
+                                    <span className="text-gray-700 block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {bio || "No bio available"}
+                                    </span>
+                                )}
                             </div>
                             <div className="text-blue-600 font-bold cursor-pointer">
                                 upvox.net
@@ -228,7 +238,9 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
+
                 <div className="w-full border-t border-gray-300 mt-10"></div>
+
                 <div className="mx-auto w-fit mt-3">
                     <div className="flex space-x-16">
                         <div className="flex items-center">
@@ -277,6 +289,7 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
+
                 <div className="mt-6 grid grid-cols-3 gap-4 mb-4">
                     {posts && posts.slice().reverse().map((post, idx) => {
                         return (
@@ -291,6 +304,7 @@ export default function Profile() {
                         )
                     })}
                 </div>
+
             </div>
         </div>
     )
