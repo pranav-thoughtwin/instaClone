@@ -89,8 +89,6 @@ export default function Post({ data }: PostProps) {
         setComment(e.target.value);
     }
 
-
-
     useEffect(() => {
         fetchLikeStatus();
     }, []);
@@ -98,32 +96,35 @@ export default function Post({ data }: PostProps) {
     return (
         <div className="border-b mb-4 pb-4 border-gray-300 ml-40 w-[450px] mt-6">
             {showComments && <Comments data={data} open={showComments} setOpen={setShowComments} />}
-            <div className="flex items-center w-full mx-auto">
-                <div className="flex items-center" onClick={handleClick}>
-                    <Image
-                        src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
-                        width={45}
-                        height={45}
-                        alt={"Post DP"}
-                        className="cursor-pointer rounded-full"
-                    />
-                    <div className="mx-2 cursor-pointer">
-                        {data?.user?.username}
+            <div className="flex justify-between items-center w-full mx-auto">
+                <div className="flex items-center">
+                    <div className="flex items-center" onClick={handleClick}>
+                        <div>
+                            <Image
+                                src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
+                                width={40}
+                                height={40}
+                                alt={"Post DP"}
+                                className="cursor-pointer rounded-full"
+                            />
+                        </div>
+                        <div className="mx-2 cursor-pointer">
+                            {data?.user?.username}
+                        </div>
+                    </div>
+                    <div className="ml-1">
+                        <Image
+                            src={"/verified.png"}
+                            width={12}
+                            height={12}
+                            alt={"Verified icon"}
+                        />
+                    </div>
+                    <div className="w-36 text-x ml-2 text-gray-500">
+                        • {formatDistanceToNow(data.createdAt)}
                     </div>
                 </div>
-                <div className="ml-12">
-                    <Image
-                        src={"/verified.png"}
-                        width={22}
-                        height={22}
-                        alt={"Verified icon"}
-                    />
-                </div>
-                {/* Todo - Fix date alignment */}
-                <div className="text-xs ml-2 text-gray-500">
-                    • {formatDistanceToNow(data.createdAt)}
-                </div>
-                <div className="ml-56 cursor-pointer">
+                <div className=" cursor-pointer">
                     <FaEllipsisH color="grey" />
                 </div>
             </div>
