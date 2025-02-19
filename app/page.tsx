@@ -32,8 +32,8 @@ export default function Home() {
         }}
       />
       <Feed />
-      {showSearch && <Search />}
-      {showNotification && <Notification />}
+      {showSearch && <Search setShowSearch={setShowSearch} showSearch={showSearch} />}
+      {showNotification && <Notification setShowNotification={setShowNotification} showNotification={showNotification} />}
       {showCreate && <Create showCreate={showCreate} setShowCreate={setShowCreate} />}
       <RightsideBar />
     </div>
