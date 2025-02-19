@@ -19,6 +19,21 @@ export default function Signup() {
 
     const handleSignup = async () => {
         try {
+            const validateEmail = (email: string) => {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            };
+
+            const validateMobileNumber = (number: string) => {
+                const re = /^\+?[1-9]\d{9,14}$/;
+                return re.test(number);
+            };
+
+            const validateStrongPassword = (password: string) => {
+                const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                return re.test(password);
+            };
+
             const errors = { numberOrEmail: '', password: '', fullName: '', username: '' };
             let valid = true;
             if (!username) {
@@ -28,12 +43,22 @@ export default function Signup() {
             if (!password) {
                 errors.password = "Password is required";
                 valid = false;
+            } else if (!validateStrongPassword(password)) {
+                errors.password = "Password must be 8 characters long, include uppercase & lowercase letter, number, and special character";
+                valid = false;
             }
             if (!numberOrEmail) {
                 errors.numberOrEmail = "Mobile number or email is required";
                 valid = false;
             }
-            if (!fullName) {
+            if (!numberOrEmail) {
+                errors.numberOrEmail = "Mobile number or email is required";
+                valid = false;
+            } else if (!validateEmail(numberOrEmail) && !validateMobileNumber(numberOrEmail)) {
+                errors.numberOrEmail = "Please enter a valid mobile number or email";
+                valid = false;
+            }
+            if (!fullName || fullName.trim().length === 0) {
                 errors.fullName = "Full name is required";
                 valid = false;
             }
@@ -47,7 +72,7 @@ export default function Signup() {
                 username: username,
                 email: numberOrEmail,
                 password: password,
-                fullName
+                fullName: fullName.trim()
             });
 
             if (response) {
@@ -97,7 +122,7 @@ export default function Signup() {
                         label="Mobile number or email address"
                         value={numberOrEmail}
                         onChange={(e) => {
-                            setNumberOrEmail(e.target.value);
+                            setNumberOrEmail(e.target.value.trim());
                             setErrors((prev) => ({ ...prev, numberOrEmail: '' }))
                         }
                         }
@@ -135,7 +160,7 @@ export default function Signup() {
                             value={password}
                             error={!!errors.password}
                             onChange={(e) => {
-                                setPassword(e.target.value);
+                                setPassword(e.target.value.trim());
                                 setErrors((prev) => ({ ...prev, password: '' }))
                             }}
                         />
@@ -171,7 +196,7 @@ export default function Signup() {
                         error={!!errors.username}
                         helperText={errors.username}
                         onChange={(e) => {
-                            setUsername(e.target.value);
+                            setUsername(e.target.value.trim());
                             setErrors((prev) => ({ ...prev, username: '' }))
                         }}
                         id="outlined-required"
