@@ -74,7 +74,7 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                                 className="cursor-pointer rounded-full"
                                             />
                                         </div>
-                                        <div className="ml-2 mt-1">
+                                        <div className="ml-2">
                                             <div className="flex">
                                                 <p>{data?.user?.username}</p>
                                                 <p className="ml-2">{data?.caption ? data?.caption : "No caption found"}</p>
@@ -88,7 +88,7 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                 {comments.map((item, idx) => {
                                     return (
                                         <div key={idx} className="px-4 mt-4 w-full">
-                                            <div className="flex text-sm items-center w-full">
+                                            <div className="flex text-sm w-full">
                                                 <div>
                                                     <Image
                                                         src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
@@ -98,26 +98,28 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                                         className="cursor-pointer rounded-full"
                                                     />
                                                 </div>
-                                                <div className="ml-2 mt-1 w-full">
-                                                    <div className="flex">
-                                                        <p>{item?.user?.username}</p>
-                                                        <p className="ml-2">{item?.content ? item?.content : "No caption found"}</p>
-                                                    </div>
-                                                    <div className="text-xs text-gray-500 flex w-full">
-                                                        <div className="">
-                                                            {formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true }).replace('about ', '')}                                                        </div>
-                                                        <div className="ml-2">like</div>
-                                                        <div className="ml-2">Reply</div>
-                                                        <div className="ml-auto">
-                                                            <Image
-                                                                src={"/like.png"}
-                                                                height={14}
-                                                                width={14}
-                                                                alt="like icom"
-                                                            />
+                                                <div className="ml-2 w-full flex items-center">
+                                                    <div>
+                                                        <div className="flex">
+                                                            <p>{item?.user?.username}</p>
+                                                            <p className="ml-2 break-all w-80">{item?.content ? item?.content : "No caption found"}</p>
+                                                        </div>
+                                                        <div className="mt-1 text-xs flex w-full">
+                                                            <div className="text-gray-500">
+                                                                {formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true }).replace('about ', '')}
+                                                            </div>
+                                                            <div className="ml-2 text-gray-500 cursor-pointer">like</div>
+                                                            <div className="ml-2 text-gray-500 cursor-pointer">Reply</div>
                                                         </div>
                                                     </div>
-
+                                                    <div className="ml-auto cursor-pointer">
+                                                        <Image
+                                                            src={"/like.png"}
+                                                            height={14}
+                                                            width={14}
+                                                            alt="like icom"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
