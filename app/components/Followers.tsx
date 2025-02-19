@@ -1,4 +1,4 @@
-import { Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
@@ -19,22 +19,32 @@ interface FollowersProp {
     followers: Follower[] | undefined
 }
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    height: 450,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    outline: 'none',
+    borderRadius: '16px'
+};
+
 export default function Followers({ showFollowers, setShowFollowers, followers }: FollowersProp) {
     const handleClose = () => setShowFollowers(false);
-    console.log("followers: ", followers);
     return (
         <div>
             <Modal
                 open={showFollowers}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
-                <div className="flex items-center justify-center h-screen">
-                    <div className="h-96 w-96 bg-white shadow-lg rounded-lg">
+                <Box sx={style}>
+                    <div className="">
                         <div className="flex items-center">
                             <div className="mx-auto w-fit m-2 flex items-center">
-                                <div>
+                                <div className="font-semibold">
                                     Followers
                                 </div>
                             </div>
@@ -75,7 +85,7 @@ export default function Followers({ showFollowers, setShowFollowers, followers }
                             })}
                         </div>
                     </div>
-                </div>
+                </Box>
             </Modal>
         </div>
     )
