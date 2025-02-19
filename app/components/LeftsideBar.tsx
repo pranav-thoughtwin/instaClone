@@ -40,7 +40,10 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
         {
             name: 'Search',
             icon: 'search',
-            onClick: () => { setShowSearch(); setShowIcon((prev => !prev)) }
+            onClick: () => {
+                setShowSearch();
+                // setShowIcon((prev => !prev));
+            }
         },
         {
             name: 'Explore',

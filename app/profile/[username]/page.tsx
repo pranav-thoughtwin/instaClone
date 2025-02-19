@@ -112,7 +112,7 @@ const Page = () => {
                     setShowNotification(false);
                 }}
             />
-            {showSearch && <Search />}
+            {showSearch && <Search showSearch={showSearch} setShowSearch={setShowSearch}/>}
             {showNotification && <Notification />}
             {showCreate && <Create showCreate={showCreate} setShowCreate={setShowCreate} />}
             {showFollowers && <Followers followers={followers} showFollowers={showFollowers} setShowFollowers={setShowFollowers} />}
