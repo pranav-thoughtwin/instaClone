@@ -1,4 +1,4 @@
-import { Button, Modal } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 import Image from "next/image";
 import { FaXmark } from "react-icons/fa6";
 import { useState } from "react";
@@ -51,19 +51,30 @@ const Create = ({ showCreate, setShowCreate }: CreateProp) => {
         }
     };
 
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500,
+        height: 400,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        outline: 'none',
+        borderRadius: '16px'
+    };
+
     return (
         <div>
             <Modal
                 open={showCreate}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
-                <div className="flex items-center justify-center h-screen">
-                    <div className="h-96 w-96 bg-white shadow-lg rounded-lg">
+                <Box sx={style}>
+                    <div className="">
                         <div className="flex items-center">
                             <div className="mx-auto w-fit m-2 flex items-center">
-                                <div>
+                                <div className="text-lg">
                                     Create new post
                                 </div>
                             </div>
@@ -73,8 +84,8 @@ const Create = ({ showCreate, setShowCreate }: CreateProp) => {
                         </div>
                         <div className="border-t border-gray-300"></div>
                         <div className="items-center justify-center flex">
-                            <div className="mt-14 space-y-4">
-                                <div className="w-fit mx-auto">
+                            <div className="mt-14">
+                                <div className="mt-4 w-fit mx-auto">
                                     <Image
                                         src={"/upload.png"}
                                         height={80}
@@ -82,10 +93,10 @@ const Create = ({ showCreate, setShowCreate }: CreateProp) => {
                                         alt="Upload icon"
                                     />
                                 </div>
-                                <div className="text-2xl w-fit mx-auto">
+                                <div className="mt-4 text-2xl w-fit mx-auto">
                                     Drag photos and videos here
                                 </div>
-                                <div className="w-fit mx-auto">
+                                <div className="mt-4 w-fit mx-auto">
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -93,11 +104,17 @@ const Create = ({ showCreate, setShowCreate }: CreateProp) => {
                                         id="upload-input"
                                         onChange={handleFileChange}
                                     />
-                                    <label htmlFor="upload-input">
-                                        <Button size="small" variant="contained" component="span">
-                                            Select from computer
-                                        </Button>
-                                    </label>
+                                    {base64URL ?
+                                        <div className="w-fit mx-auto">
+                                            <Button size="small" variant="contained" onClick={handleUpload}>
+                                                Upload
+                                            </Button>
+                                        </div> : <label htmlFor="upload-input">
+                                            <Button size="small" variant="contained" component="span">
+                                                Select from computer
+                                            </Button>
+                                        </label>
+                                    }
                                 </div>
                                 {base64URL && (
                                     <div className="mt-4">
@@ -109,15 +126,10 @@ const Create = ({ showCreate, setShowCreate }: CreateProp) => {
                                         />
                                     </div>
                                 )}
-                                <div className="w-fit mx-auto mt-4">
-                                    <Button size="small" variant="contained" onClick={handleUpload}>
-                                        Upload
-                                    </Button>
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </Box>
             </Modal>
         </div>
     );
