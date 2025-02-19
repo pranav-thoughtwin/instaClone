@@ -14,7 +14,7 @@ interface LeftsideBarProps {
 
 export default function LeftsideBar({ setShowSearch, setShowNotification, setShowCreate }: LeftsideBarProps) {
     const router = useRouter();
-    const [showIcon, setShowIcon] = useState(false);
+    // const [showIcon, setShowIcon] = useState(false);
     const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
 
     useEffect(() => {
@@ -63,7 +63,10 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
         {
             name: 'Notifications',
             icon: 'notifications',
-            onClick: () => { setShowNotification(); setShowIcon((prev => !prev)) }
+            onClick: () => {
+                setShowNotification();
+                // setShowIcon((prev => !prev))
+            }
         },
         {
             name: 'Create',
@@ -86,9 +89,12 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
         <div className="w-56 border-r pl-5 pt-8 h-screen">
             <div className="">
                 <Image
-                    src={showIcon ? "/instaIcon.png" : "/insta.png"}
-                    width={showIcon ? 24 : 120}
-                    height={showIcon ? 24 : 120}
+                    // src={showIcon ? "/instaIcon.png" : "/insta.png"}
+                    // width={showIcon ? 24 : 120}
+                    // height={showIcon ? 24 : 120}
+                    src={"/insta.png"}
+                    width={120}
+                    height={120}
                     alt="Insta logo"
                 />
             </div>
