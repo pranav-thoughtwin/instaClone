@@ -1,8 +1,9 @@
 import Post from "./Post";
 import Stories from "./Stories";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
 import CaughtUp from "./CaughtUp";
+import FollowMore from "./FollowMore";
 
 interface PostProps {
     id: number;
@@ -16,7 +17,11 @@ interface PostProps {
     };
 }
 
-export default function Feed() {
+interface FeedProps {
+    setShowSearch: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Feed({ setShowSearch }: FeedProps) {
     const [posts, setPosts] = useState<PostProps[][]>([]);
     const { apiCall } = useApi();
 
@@ -41,7 +46,7 @@ export default function Feed() {
                     return <Post key={idx} data={post} />
                 })
             })}
-            <CaughtUp />
+            {posts.length > 0 ? <CaughtUp /> : <FollowMore setShowSearch={setShowSearch} />}
         </div>
     )
 }

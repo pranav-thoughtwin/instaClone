@@ -31,7 +31,7 @@ export default function Home() {
           setShowNotification(false);
         }}
       />
-      <Feed />
+      <Feed setShowSearch={setShowSearch} />
       {showSearch && <Search setShowSearch={setShowSearch} showSearch={showSearch} />}
       {showNotification && <Notification setShowNotification={setShowNotification} showNotification={showNotification} />}
       {showCreate && <Create showCreate={showCreate} setShowCreate={setShowCreate} />}

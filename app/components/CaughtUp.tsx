@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function CaughtUp() {
     return (
-        <div className="ml-40 w-[450px] pb-6 justify-center items-center">
-            <div className="flex mt-12">
+        <div className="ml-40 mt-12 w-[450px] pb-6 justify-center items-center">
+            <div className="flex">
                 <div className="border-2 h-fit items-center border-b-0 border-r-0 border-l-0  border-gray-300 w-full bg-red pb-4"></div>
                 <div className="border-t-2 border-b-0 border-r-0 border-l-0"></div>
                 <div className="-mt-3">
