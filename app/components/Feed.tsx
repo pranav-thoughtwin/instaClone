@@ -2,6 +2,7 @@ import Post from "./Post";
 import Stories from "./Stories";
 import { useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
+import CaughtUp from "./CaughtUp";
 
 interface PostProps {
     id: number;
@@ -40,6 +41,7 @@ export default function Feed() {
                     return <Post key={idx} data={post} />
                 })
             })}
+            <CaughtUp />
         </div>
     )
 }
