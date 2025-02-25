@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { checkTokenExpiration } from './checkTokenExpiration';
 
 interface AuthenticatedRequest extends NextRequest {
     user?: JwtPayload | string
 }
 
 export function authMiddleware(request: AuthenticatedRequest) {
-    checkTokenExpiration(request);
     const token = request.headers.get('Authorization')?.split(' ')[1];
 
     const SECRET_KEY = process.env.NEXT_PUBLIC_JWT_SECRET || 'secret';
