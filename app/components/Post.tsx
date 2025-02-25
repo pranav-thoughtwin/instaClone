@@ -25,6 +25,8 @@ interface PostProps {
 
 export default function Post({ data }: PostProps) {
     const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+    const [commentCount, setCommentCount] = useState(0);
     const [comment, setComment] = useState("");
     const [showComments, setShowComments] = useState(false);
     const { apiCall } = useApi();
@@ -69,6 +71,32 @@ export default function Post({ data }: PostProps) {
         }
     }
 
+    const fetchLikeCount = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/like/count/${data?.id}`, method: 'GET'
+            })
+            if (response?.data) {
+                setLikeCount(response?.data);
+            }
+        } catch (error) {
+            console.log("Error fetching like status of post: ", error);
+        }
+    }
+
+    const fetchCommentCount = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/comment/count/${data?.id}`, method: 'GET'
+            })
+            if (response?.data) {
+                setCommentCount(response?.data);
+            }
+        } catch (error) {
+            console.log("Error fetching like status of post: ", error);
+        }
+    }
+
     const postComment = async () => {
         try {
             const response = await apiCall({
@@ -91,6 +119,8 @@ export default function Post({ data }: PostProps) {
 
     useEffect(() => {
         fetchLikeStatus();
+        fetchLikeCount();
+        fetchCommentCount();
     }, []);
 
     return (
@@ -169,7 +199,7 @@ export default function Post({ data }: PostProps) {
                 />
             </div>
             <div className="font-bold text-gray-800 mt-2">
-                741,368 likes
+                {likeCount} {likeCount > 1 ? "likes" : "like"}
             </div>
             <div className="flex space-x-2">
                 <div className="font-bold text-gray-800">
@@ -183,7 +213,12 @@ export default function Post({ data }: PostProps) {
                 See translation
             </div>
             <div onClick={() => setShowComments(true)} className="text-gray-500 mt-2 text-sm cursor-pointer">
-                View all 13,384 comments
+                {
+                    !commentCount ?
+                        `No comments yet` :
+                        `View all ${commentCount} ${commentCount > 1 ? "comments" : "comment"}`
+                }
+                
             </div>
             <div className="text-gray-500 mt-2 space-x-1 flex text-sm">
                 <p className="font-bold">thepranavshukla</p>

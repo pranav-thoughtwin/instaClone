@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { formatDistanceToNow } from "date-fns";
 import useApi from "../hooks/useApi";
-import { Comment, CommentsProps } from "@/types"; 
+import { Comment, CommentsProps } from "@/types";
 
 export default function Comments({ open, setOpen, data }: CommentsProps) {
     const [comments, setComments] = useState<Comment[]>([]);
+    const [likeCount, setLikeCount] = useState(0);
     const { apiCall } = useApi();
 
     const fetchComments = async () => {
@@ -21,8 +22,22 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
         }
     }
 
+    const fetchLikeCount = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/like/count/${data?.id}`, method: 'GET'
+            })
+            if (response?.data) {
+                setLikeCount(response?.data);
+            }
+        } catch (error) {
+            console.log("Error fetching like status of post: ", error);
+        }
+    }
+
     useEffect(() => {
         fetchComments();
+        fetchLikeCount();
     }, []);
 
     return (
@@ -86,46 +101,48 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                             </div>
                                         </div>
                                     </div>
-                                    {comments.map((item, idx) => {
-                                        return (
-                                            <div key={idx} className="px-4 mt-4 w-full">
-                                                <div className="flex text-sm w-full">
-                                                    <div>
-                                                        <Image
-                                                            src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
-                                                            width={35}
-                                                            height={35}
-                                                            alt={"Post DP"}
-                                                            className="cursor-pointer rounded-full"
-                                                        />
-                                                    </div>
-                                                    <div className="ml-2 w-full flex items-center">
+                                    <div className="h-56 overflow-auto">
+                                        {comments.map((item, idx) => {
+                                            return (
+                                                <div key={idx} className="px-2 mt-4 w-full">
+                                                    <div className="flex text-sm w-full">
                                                         <div>
-                                                            <div className="flex">
-                                                                <p>{item?.user?.username}</p>
-                                                                <p className="ml-2 break-all w-80">{item?.content ? item?.content : "No caption found"}</p>
-                                                            </div>
-                                                            <div className="mt-1 text-xs flex w-full">
-                                                                <div className="text-gray-500">
-                                                                    {formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true }).replace('about ', '')}
-                                                                </div>
-                                                                <div className="ml-2 text-gray-500 cursor-pointer">like</div>
-                                                                <div className="ml-2 text-gray-500 cursor-pointer">Reply</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="ml-auto cursor-pointer">
                                                             <Image
-                                                                src={"/like.png"}
-                                                                height={14}
-                                                                width={14}
-                                                                alt="like icom"
+                                                                src={data?.user?.profilePicture ? data?.user?.profilePicture : '/dummy-profile-pic.png'}
+                                                                width={35}
+                                                                height={35}
+                                                                alt={"Post DP"}
+                                                                className="cursor-pointer rounded-full"
                                                             />
+                                                        </div>
+                                                        <div className="ml-2 w-full flex items-center">
+                                                            <div>
+                                                                <div className="flex">
+                                                                    <p>{item?.user?.username}</p>
+                                                                    <p className="ml-2 break-all w-80">{item?.content ? item?.content : "No caption found"}</p>
+                                                                </div>
+                                                                <div className="mt-1 text-xs flex w-full">
+                                                                    <div className="text-gray-500">
+                                                                        {formatDistanceToNow(new Date(item?.createdAt), { addSuffix: true }).replace('about ', '')}
+                                                                    </div>
+                                                                    <div className="ml-2 text-gray-500 cursor-pointer">like</div>
+                                                                    <div className="ml-2 text-gray-500 cursor-pointer">Reply</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="ml-auto cursor-pointer">
+                                                                <Image
+                                                                    src={"/like.png"}
+                                                                    height={14}
+                                                                    width={14}
+                                                                    alt="like icom"
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })}
+                                    </div>
                                 </div>
                                 <div className="absolute bottom-0 w-full pb-2">
                                     <div className="flex mt-2 item-center justify-between px-2">
@@ -166,7 +183,8 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                         </div>
                                     </div>
                                     <div className="px-2 mt-3">
-                                        <div className="font-bold text-gray-900">11,805 likes</div>
+                                        <div className="font-bold text-gray-900">{likeCount} {likeCount > 1 ? "likes" : "like"}
+                                        </div>
                                         <p className="text-sm text-gray-500">1 day ago</p>
                                     </div>
                                     <div className="border-b-0 border-t mt-4 border-r-0 border-l-0 pt-2 border-gray-300 border-2"></div>
