@@ -36,7 +36,7 @@ export default function Post({ data }: PostProps) {
         router.push(`/profile/${data?.user.username}`);
     }
 
-    const handleLike = async () => {
+    const handleLike = async () => { 
         if (!liked) {
             const response = await apiCall({
                 url: `api/like`, method: 'POST', data: {
@@ -47,6 +47,7 @@ export default function Post({ data }: PostProps) {
                 toast("Post liked");
             }
             setLiked(true);
+            setLikeCount((prev) => prev + 1);
         }
         else {
             toast("Already liked");
@@ -99,15 +100,19 @@ export default function Post({ data }: PostProps) {
 
     const postComment = async () => {
         try {
-            const response = await apiCall({
-                url: `api/comment`, method: `POST`, data: {
-                    postId: data?.id,
-                    content: comment
-                }
-            })
-            setComment("");
-            console.log(response)
-            toast("Comment posted");
+            if (comment) {
+                const response = await apiCall({
+                    url: `api/comment`, method: `POST`, data: {
+                        postId: data?.id,
+                        content: comment
+                    }
+                })
+                setComment("");
+                console.log(response)
+                toast("Comment posted");
+            } else {
+                toast("Comment can't be empty");
+            }
         } catch (error) {
             console.log("Error posting comment: ", error);
         }

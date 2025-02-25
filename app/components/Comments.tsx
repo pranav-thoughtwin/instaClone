@@ -5,10 +5,14 @@ import { FaXmark } from "react-icons/fa6";
 import { formatDistanceToNow } from "date-fns";
 import useApi from "../hooks/useApi";
 import { Comment, CommentsProps } from "@/types";
+import { toast } from "react-toastify";
 
 export default function Comments({ open, setOpen, data }: CommentsProps) {
     const [comments, setComments] = useState<Comment[]>([]);
+    const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [comment, setComment] = useState("");
+
     const { apiCall } = useApi();
 
     const fetchComments = async () => {
@@ -35,9 +39,73 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
         }
     }
 
+    const handleLike = async () => {
+        if (!liked) {
+            const response = await apiCall({
+                url: `api/like`, method: 'POST', data: {
+                    postId: data?.id
+                }
+            })
+            if (response.status === 200) {
+                toast("Post liked");
+            }
+            setLiked(true);
+            setLikeCount((prev) => prev + 1);
+        }
+        else {
+            toast("Already liked");
+        }
+    }
+
+    const fetchLikeStatus = async () => {
+        try {
+            const response = await apiCall({
+                url: `api/like/status`, method: 'POST', data: {
+                    postId: data?.id
+                }
+            })
+            if (response?.data?.length > 0) {
+                setLiked(true);
+            }
+            else {
+                setLiked(false);
+            }
+        } catch (error) {
+            console.log("Error fetching like status of post: ", error);
+        }
+    }
+
+
+    const postComment = async () => {
+        try {
+            if (comment) {
+                const response = await apiCall({
+                    url: `api/comment`, method: `POST`, data: {
+                        postId: data?.id,
+                        content: comment
+                    }
+                })
+                setComment("");
+                console.log(response);
+                // can't set from here beacause id for each comment is generated from backend
+                // setComments((prev) => [...prev, response.data.content]);
+                toast("Comment posted");
+            } else {
+                toast("Comment can't be empty")
+            }
+        } catch (error) {
+            console.log("Error posting comment: ", error);
+        }
+    }
+
+    const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setComment(e.target.value);
+    }
+
     useEffect(() => {
         fetchComments();
         fetchLikeCount();
+        fetchLikeStatus();
     }, []);
 
     return (
@@ -148,13 +216,12 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                     <div className="flex mt-2 item-center justify-between px-2">
                                         <div className="flex">
                                             <Image
-                                                // src={liked ? "/liked.png" : "/like.png"}
-                                                src={"/like.png"}
+                                                src={liked ? "/liked.png" : "/like.png"}
                                                 width={25}
                                                 height={25}
                                                 alt={"like icon"}
                                                 className="cursor-pointer"
-                                            // onClick={handleLike}
+                                                onClick={handleLike}
                                             />
                                             <Image
                                                 src={"/comment.png"}
@@ -162,7 +229,7 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                                 height={25}
                                                 alt={"comment icon"}
                                                 className="ml-4 cursor-pointer"
-                                            // onClick={() => setShowComments(true)}
+                                                // onClick={() => setShowComments(true)}
                                             />
                                             <Image
                                                 src={"/share.png"}
@@ -189,10 +256,8 @@ export default function Comments({ open, setOpen, data }: CommentsProps) {
                                     </div>
                                     <div className="border-b-0 border-t mt-4 border-r-0 border-l-0 pt-2 border-gray-300 border-2"></div>
                                     <div className="flex items-center justify-between pr-2">
-                                        <div className="p-2 text-sm text-gray-400 font-semibold">
-                                            Add a comment...
-                                        </div>
-                                        <div className="cursor-pointer font-semibold text-blue-300 text-sm">
+                                        <input value={comment} onChange={handleComment} type="text" className="focus:outline-none focus:border-none focus:text-black focus:font-medium p-2 text-sm text-gray-400 font-semibold" placeholder="Add a comment..."/>
+                                        <div onClick={postComment} className="cursor-pointer font-semibold text-blue-400 text-sm">
                                             Post
                                         </div>
                                     </div>
