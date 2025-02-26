@@ -1,5 +1,5 @@
 'use client'
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import Cookie from 'js-cookie';
 
 export default function Login() {
     const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({ username: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,7 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
+            setLoading(true);
             const errors = { username: '', password: '' };
             let valid = true;
             if (!username) {
@@ -31,6 +33,7 @@ export default function Login() {
             }
             setErrors(errors);
             if (!valid) {
+                setLoading(false);
                 return;
             }
 
@@ -46,7 +49,9 @@ export default function Login() {
             Cookie.set("token", token, { expires: 1, path: '/' });
 
             router.push('/');
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             if (axios.isAxiosError(error)) {
                 toast(error?.response?.data?.error);
             }
@@ -119,7 +124,14 @@ export default function Login() {
                     {errors.password && <span className="text-red-500 text-xs ml-3">{errors.password}</span>}
                 </div>
                 <div className="mt-3">
-                    <Button onClick={handleLogin} variant="contained" fullWidth>Log in</Button>
+                    <Button
+                        onClick={handleLogin}
+                        variant="contained"
+                        fullWidth
+                        disabled={loading}
+                    >
+                        {loading ? <CircularProgress size={24} /> : 'Log in'}
+                    </Button>
                 </div>
                 <div className="flex mt-4 items-center space-x-2">
                     <div className="w-full border-t border-black-200"></div>
@@ -151,7 +163,7 @@ export default function Login() {
                     />
                 </div>
                 <div>
-            </div>
+                </div>
             </div>
         </div>
     )

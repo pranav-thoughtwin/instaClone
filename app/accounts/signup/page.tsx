@@ -1,5 +1,5 @@
 'use client'
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import Cookie from 'js-cookie';
 
 export default function Signup() {
     const [numberOrEmail, setNumberOrEmail] = useState('');
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
@@ -19,6 +20,7 @@ export default function Signup() {
 
     const handleSignup = async () => {
         try {
+            setLoading(true);
             const validateEmail = (email: string) => {
                 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return re.test(email);
@@ -48,14 +50,14 @@ export default function Signup() {
                 valid = false;
             }
             if (!numberOrEmail) {
-                errors.numberOrEmail = "Mobile number or email is required";
+                errors.numberOrEmail = "Email is required";
                 valid = false;
             }
             if (!numberOrEmail) {
-                errors.numberOrEmail = "Mobile number or email is required";
+                errors.numberOrEmail = "Email is required";
                 valid = false;
             } else if (!validateEmail(numberOrEmail) && !validateMobileNumber(numberOrEmail)) {
-                errors.numberOrEmail = "Please enter a valid mobile number or email";
+                errors.numberOrEmail = "Please enter a valid email";
                 valid = false;
             }
             if (!fullName || fullName.trim().length === 0) {
@@ -65,6 +67,7 @@ export default function Signup() {
             setErrors(errors);
 
             if (!valid) {
+                setLoading(false);
                 return;
             }
 
@@ -82,7 +85,9 @@ export default function Signup() {
             Cookie.set("token", token, { expires: 1, path: '/' });
 
             router.push('/');
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             if (axios.isAxiosError(error)) {
                 toast(error?.response?.data?.error);
             }
@@ -219,7 +224,9 @@ export default function Signup() {
                 </div>
 
                 <div className="mt-3 mb-4">
-                    <Button onClick={handleSignup} variant="contained" fullWidth>Sign Up</Button>
+                    <Button onClick={handleSignup} variant="contained" fullWidth>
+                        {loading ? <CircularProgress size={24}/> : "Sign Up"}
+                    </Button>
                 </div>
             </div>
         </div>
