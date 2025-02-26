@@ -76,7 +76,7 @@ export default function Signup() {
             });
 
             if (response) {
-                toast(response.data.message);
+                // toast(response.data.message);
             }
             const token = response.data.token;
             Cookie.set("token", token, { expires: 1, path: '/' });

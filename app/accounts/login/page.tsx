@@ -39,7 +39,8 @@ export default function Login() {
                 password: password,
             });
             if (response) {
-                toast(response.data.message);
+                console.log("Response: ", response);
+                // toast(response.data.message);
             }
             const token = response.data.token;
             Cookie.set("token", token, { expires: 1, path: '/' });

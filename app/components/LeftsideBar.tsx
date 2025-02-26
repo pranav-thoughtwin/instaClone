@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "@/types";
@@ -28,7 +27,7 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
     const handleSignout = () => {
         Cookie.remove("token", { path: '/' });
         router.push('/accounts/login');
-        toast("Signout successful");
+        // toast("Signout successful");
     }
 
     const items = [
