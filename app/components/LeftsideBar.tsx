@@ -100,9 +100,11 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
 
             <div className="mt-10 space-y-8">
                 {items.map((item, idx) => {
+                    const isDisabled = item.name === 'Explore' || item.name === 'Reels' || item.name === 'Messages' ;
+
                     return (
-                        <div onClick={item.onClick} key={idx} className="flex space-x-6 items-center cursor-pointer">
-                            <div>
+                        <div onClick={item.onClick} key={idx} className={`flex space-x-6 items-center cursor-pointer ${isDisabled ? 'cursor-not-allowed' : ''}`}>
+                            <div className={`${isDisabled ? 'filter grayscale opacity-50 cursor-not-allowed' : ''}`}>
                                 <Image
                                     src={`/${item.icon}.png`}
                                     width={item.icon === 'logout' ? 20 : 25}
@@ -110,7 +112,7 @@ export default function LeftsideBar({ setShowSearch, setShowNotification, setSho
                                     alt={item.name}
                                 />
                             </div>
-                            <div key={idx}>{item.name}</div>
+                            <div className={`${isDisabled ? 'text-gray-500 cursor-not-allowed' : ''}`} key={idx}>{item.name}</div>
                         </div>
                     )
                 })}
