@@ -69,7 +69,7 @@ export default function Login() {
                     <TextField
                         required
                         id="outlined-required"
-                        label="Phone number, username or email address"
+                        label="Email address"
                         value={username}
                         onChange={(e) => {
                             setUsername(e.target.value);

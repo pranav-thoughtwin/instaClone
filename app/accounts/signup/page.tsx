@@ -119,7 +119,7 @@ export default function Signup() {
                     <TextField
                         required
                         id="outlined-required"
-                        label="Mobile number or email address"
+                        label="Email address"
                         value={numberOrEmail}
                         onChange={(e) => {
                             setNumberOrEmail(e.target.value.trim());
