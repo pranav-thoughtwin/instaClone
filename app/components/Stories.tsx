@@ -29,11 +29,12 @@ export default function Stories() {
     ]
     return (
         <div>
-            <div className="flex space-x-2 ml-10">
+            <div className="flex space-x-2 ml-10 filter grayscale opacity-50 cursor-not-allowed">
                 {
                     stories.map((item, idx) => {
                         return (
-                            <div key={idx} className="cursor-pointer">
+                            // <div key={idx} className="cursor-pointer">
+                            <div key={idx} className="cursor-not-allowed">
                                 <div>
                                     <Image
                                         src={`${item.icon}.png`}

@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function RightsideBar() {
     const suggestions = ['grayDP', 'grayDP', 'grayDP', 'grayDP', 'grayDP']
     return (
-        <div className="w-80 ml-auto">
+        <div className="w-80 ml-auto fitler grayscale opacity-50 cursor-not-allowed">
             <div className="mt-14 flex items-center">
                 <div>
                     <Image
@@ -11,10 +11,12 @@ export default function RightsideBar() {
                         width={60}
                         height={60}
                         alt={"profile"}
-                        className="cursor-pointer"
+                        // className="cursor-pointer"
+                        className="cursor-not-allowed"
                     />
                 </div>
-                <div className="ml-4 cursor-pointer">
+                {/* <div className="ml-4 cursor-pointer"> */}
+                <div className="ml-4 cursor-not-allowed">
                     <div className="font-bold">
                         upvox_
                     </div>
@@ -22,7 +24,9 @@ export default function RightsideBar() {
                         Upvox
                     </div>
                 </div>
-                <div className="text-sm text-blue-500 ml-auto pr-4 cursor-pointer">
+                {/* <div className="text-sm text-blue-500 ml-auto pr-4 cursor-pointer"> */}
+                <div className="text-sm text-blue-500 ml-auto pr-4 cursor-not-allowed">
+
                     Switch
                 </div>
             </div>
@@ -30,7 +34,8 @@ export default function RightsideBar() {
                 <div className="font-semibold text-gray-400">
                     Suggestions for you
                 </div>
-                <div className="font-bold cursor-pointer">
+                {/* <div className="font-bold cursor-pointer"> */}
+                <div className="font-bold cursor-not-allowed">
                     See all
                 </div>
             </div>
@@ -44,10 +49,12 @@ export default function RightsideBar() {
                                     width={45}
                                     height={45}
                                     alt={"profile"}
-                                    className="cursor-pointer"
+                                    // className="cursor-pointer"
+                                    className="cursor-not-allowed"
                                 />
                             </div>
-                            <div className="text-sm ml-2 cursor-pointer">
+                            {/* <div className="text-sm ml-2 cursor-pointer"> */}
+                            <div className="text-sm ml-2 cursor-not-allowed">
                                 <div className="font-semibold">
                                     imkir
                                 </div>
@@ -55,7 +62,8 @@ export default function RightsideBar() {
                                     Follows you
                                 </div>
                             </div>
-                            <div className="text-blue-500 ml-28 text-sm font-bold cursor-pointer">
+                            {/* <div className="text-blue-500 ml-28 text-sm font-bold cursor-pointer"> */}
+                            <div className="text-blue-500 ml-28 text-sm font-bold cursor-not-allowed">
                                 Follow
                             </div>
                         </div>
