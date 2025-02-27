@@ -8,6 +8,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Cookie from 'js-cookie';
+import { signIn } from "next-auth/react";
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -138,7 +139,7 @@ export default function Login() {
                     <span className="text-gray-500 text-sm font-bold">OR</span>
                     <div className="w-full border-t border-black-200"></div>
                 </div>
-                <div className="mx-auto mt-6 cursor-pointer">
+                <div className="mx-auto mt-6 cursor-pointer" onClick={() => signIn('facebook')}>
                     <div className="items-center flex space-x-2">
                         <div>
                             <FaFacebook size={26} color="#1877F2" />
