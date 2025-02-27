@@ -17,7 +17,7 @@ declare module "next-auth/jwt" {
     }
 }
 
-const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = { 
     providers: [
         FacebookProvider({
             clientId: '652683303874507',
