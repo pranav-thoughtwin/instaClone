@@ -1,6 +1,6 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
-// import { JWT } from "next-auth/jwt";
 
 // Extend the default user object type to include the id property
 declare module "next-auth" {
@@ -17,7 +17,7 @@ declare module "next-auth/jwt" {
     }
 }
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
     providers: [
         FacebookProvider({
             clientId: '652683303874507',
@@ -41,4 +41,5 @@ export const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
